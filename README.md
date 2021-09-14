@@ -6,11 +6,11 @@ The pre-compiled model in `models/` folder is trained with following classificat
 - safe (various neutral things) : 38,608 images
 - sensitive (nudity, violence) : 16,545 images
 
-However, you can train any image classification using this code. Just follow the instruction.
+However, you can train any image classification with your own defined classes using this code. Just follow the instruction.
 
 ### Model architecture
 <p align="center">
-<img alt="Model architecture" src="https://github.com/anggara-kaskus/nsfw-model/blob/main/models/model.png?raw=true">
+<img alt="Model architecture" width="500" src="https://github.com/anggara-kaskus/nsfw-model/blob/main/models/model.png?raw=true">
 </p>
 
 ### Dataset Sources
@@ -25,6 +25,8 @@ Unfortunately, the accuracy of 'sensitive' class is quite low and may be caused 
 - The dataset is very noisy (ie: some safe images included in sensitive folder, or vice versa)
 
 ### Classification Report
+From this report, although overall accuracy reach 91%, we can see that classification score for 'sensitive' images needs improvement.
+
 ```
               precision    recall  f1-score   support
 
@@ -35,10 +37,9 @@ Unfortunately, the accuracy of 'sensitive' class is quite low and may be caused 
    macro avg       0.87      0.80      0.83     20358
 weighted avg       0.90      0.91      0.90     20358
 ```
-<p align="center">
-<img alt="Confusion Matrix" src="https://github.com/anggara-kaskus/nsfw-model/blob/main/models/confusion_matrix.png?raw=true">
-</p>
+<img alt="Confusion Matrix" width="500" src="https://github.com/anggara-kaskus/nsfw-model/blob/main/models/confusion_matrix.png?raw=true">
 
+We can do fine-tuning later with better dataset.
 
 ## Setup
 ### Prerequisites
@@ -48,6 +49,10 @@ weighted avg       0.90      0.91      0.90     20358
 
 ### Installation
 - Clone this repo
+```sh
+git clone git@github.com:anggara-kaskus/nsfw-model.git
+cd nsfw-model
+```
 - Install dependencies
 ```sh
 pip install -r requirements.txt
