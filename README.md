@@ -3,22 +3,22 @@ Image classification using Keras and Convolutional Neural Network (CNN). Trainin
 
 ## Current Status
 The pre-compiled model in `models/` folder is trained with following classification:
-    - safe (various neutral things) : 38,608 images
-    - sensitive (nudity, violence) : 16,545 images
+- safe (various neutral things) : 38,608 images
+- sensitive (nudity, violence) : 16,545 images
 
 However, you can train any image classification using this code. Just follow the instruction.
 
 ### Model architecture
 <p align="center">
-<img alt="Model architecture" src="https://github.com/anggara-kaskus/nsfw-model/blob/master/models/model.png?raw=true">
+<img alt="Model architecture" src="https://github.com/anggara-kaskus/nsfw-model/blob/main/models/model.png?raw=true">
 </p>
 
 ### Dataset Sources
 
 This dataset is collected from various sources with total of ~10GB of image files:
-    - Some neutral and NSFW images fetched using [nsfw_data_scraper](https://github.com/alex000kim/nsfw_data_scraper/)
-    - Some NSFW images fetched using [nsfw_data_source_urls](https://github.com/EBazarov/nsfw_data_source_urls)
-    - Some violence images scraped from subforum at Kaskus
+- Some neutral and NSFW images fetched using [nsfw_data_scraper](https://github.com/alex000kim/nsfw_data_scraper/)
+- Some NSFW images fetched using [nsfw_data_source_urls](https://github.com/EBazarov/nsfw_data_source_urls)
+- Some violence images scraped from subforum at Kaskus
 
 Unfortunately, the accuracy of 'sensitive' class is quite low and may be caused by following reasons:
 - The number of images is not balanced between classes
@@ -36,7 +36,7 @@ Unfortunately, the accuracy of 'sensitive' class is quite low and may be caused 
 weighted avg       0.90      0.91      0.90     20358
 ```
 <p align="center">
-<img alt="Confusion Matrix" src="https://github.com/anggara-kaskus/nsfw-model/blob/master/models//confusion_matrix.png">
+<img alt="Confusion Matrix" src="https://github.com/anggara-kaskus/nsfw-model/blob/main/models/confusion_matrix.png?raw=true">
 </p>
 
 
