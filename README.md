@@ -10,7 +10,7 @@ However, you can train any image classification with your own defined classes us
 
 ### Model architecture
 <p align="center">
-<img alt="Model architecture" width="500" src="https://github.com/anggara-kaskus/nsfw-model/blob/main/models/model.png?raw=true">
+<img alt="Model architecture" width="500" src="https://github.com/anggara-kaskus/image-classification/blob/main/models/model.png?raw=true">
 </p>
 
 ### Dataset Sources
@@ -37,7 +37,7 @@ From this report, although overall accuracy reach 91%, we can see that classific
    macro avg       0.87      0.80      0.83     20358
 weighted avg       0.90      0.91      0.90     20358
 ```
-<img alt="Confusion Matrix" width="500" src="https://github.com/anggara-kaskus/nsfw-model/blob/main/models/confusion_matrix.png?raw=true">
+<img alt="Confusion Matrix" width="500" src="https://github.com/anggara-kaskus/image-classification/blob/main/models/confusion_matrix.png?raw=true">
 
 We can do fine-tuning later with better dataset.
 
@@ -50,8 +50,8 @@ We can do fine-tuning later with better dataset.
 ### Installation
 - Clone this repo
 ```sh
-git clone git@github.com:anggara-kaskus/nsfw-model.git
-cd nsfw-model
+git clone git@github.com:anggara-kaskus/image-classification.git
+cd image-classification
 ```
 - Install dependencies
 ```sh
