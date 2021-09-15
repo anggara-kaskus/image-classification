@@ -172,7 +172,7 @@ This will generate `models/confusion_matrix.png` and `models/classification_repo
 ## Running classification on image
 
 ### Run one time prediction
-Classify single image or multiple images in a directory:
+Classify single image:
 
 ```sh
 python prediction/predict.py --image_source /path/to/image.jpg
@@ -209,7 +209,7 @@ The server will listen to port *1235*
 
 You can connect as telnet client and input full path of target image (in server's storage)
 ```
-$ gtelnet localhost 1235
+$ telnet localhost 1235
 Trying 127.0.0.1...
 Connected to localhost.
 Escape character is '^]'.
