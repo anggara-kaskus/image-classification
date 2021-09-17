@@ -293,7 +293,7 @@ def build_model(module_layer, hparams, image_size, num_classes):
 					kernel_regularizer=None),
 				tf.keras.layers.Activation('softmax', dtype='float32', name='prediction')
 			])
-	
+
 	print(model.summary())
 	return model
 
@@ -322,11 +322,20 @@ def train_model(model, hparams, train_data_and_size, valid_data_and_size):
 	"""
 
 	earlystop_callback = tf.keras.callbacks.EarlyStopping(
-  		monitor='val_accuracy', min_delta=0.0001,
+  		monitor='val_loss', min_delta=0.0001,
   		patience=1)
 	tensorboard_callback = tf.keras.callbacks.TensorBoard(
 		log_dir=os.path.dirname(__file__) + '/logs',
 		histogram_freq=1
+	)
+	save_checkpoint = tf.keras.callbacks.ModelCheckpoint(
+		os.path.dirname(__file__) + '/checkpoints/checkpoint.epoch{epoch:02d}-loss{val_loss:.2f}.hdf5',
+		monitor='val_loss',
+		verbose=1,
+		save_best_only=False,
+		save_weights_only=False,
+		mode='auto',
+		period=1
 	)
 
 	train_data, train_size = train_data_and_size
@@ -352,7 +361,8 @@ def train_model(model, hparams, train_data_and_size, valid_data_and_size):
 		epochs=hparams.train_epochs,
 		callbacks=[
 			earlystop_callback,
-			tensorboard_callback
+			tensorboard_callback,
+			save_checkpoint
 		],
 		steps_per_epoch=steps_per_epoch,
 		validation_data=valid_data,

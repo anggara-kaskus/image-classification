@@ -49,7 +49,7 @@ def load_model(model_path):
     if model_path is None or not exists(model_path):
         raise ValueError("saved_model_path must be the valid directory of a saved model to load.")
     
-    model = tf.keras.models.load_model(model_path, custom_objects={'KerasLayer': hub.KerasLayer})
+    model = tf.keras.models.load_model(model_path, custom_objects={'KerasLayer': hub.KerasLayer}, compile=False)
     return model
 
 
