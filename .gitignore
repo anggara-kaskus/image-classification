@@ -128,10 +128,12 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
+*_bak
+
 training/data/raw/*
 training/data/split/*
 training/data/invalid/*
 training/data/processed/*
 training/data/wrong/*
-notebooks/logs/*
+**/logs/*
 !**/.keep

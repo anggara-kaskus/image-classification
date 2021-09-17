@@ -19,7 +19,7 @@ with open(model_directory + '/labels.txt') as file:
     class_names=file.readlines()
     class_names=[line.rstrip() for line in class_names]
 
-model=load_model(model_directory + '/saved_model.h5', custom_objects={'KerasLayer':hub.KerasLayer})
+model=load_model(model_directory + '/saved_model.h5', custom_objects={'KerasLayer':hub.KerasLayer}, compile=False)
 image_size=224
 x_test=[]
 y_test=[]

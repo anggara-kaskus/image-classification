@@ -206,8 +206,6 @@ def _get_hparams_from_flags():
 			)
 			
 
-
-
 def _check_keras_dependencies():
 	"""Checks dependencies of tf.keras.preprocessing.image are present.
 
@@ -285,7 +283,8 @@ def main(args):
 	if saved_model_dir:
 		# Ensure dir structure exists
 		Path(saved_model_dir).mkdir(parents=True, exist_ok=True)
-		tf.saved_model.save(model, saved_model_dir)
+		#tf.saved_model.save(model, saved_model_dir)
+		tf.keras.models.save_model(model, saved_model_dir)
 		keras_model_path = os.path.join(saved_model_dir, "saved_model.h5")
 		weights_path = os.path.join(saved_model_dir, "saved_model_weights.h5")
 		model.save(keras_model_path)
