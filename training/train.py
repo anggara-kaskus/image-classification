@@ -96,7 +96,7 @@ flags.DEFINE_string(
 		"saved_model_dir", model_directory,
 		"The final model is exported as a SavedModel directory with this name.")
 flags.DEFINE_string(
-		"tflite_output_file", None,
+		"tflite_output_file", model_directory + '/tflite/',
 		"The final model is exported as a .tflite flatbuffers file with this name.")
 flags.DEFINE_string(
 		"labels_output_file", labels_file,
@@ -297,6 +297,11 @@ def main(args):
 			expand_nested=True,
 			dpi=192
 		)
+		
+		with tf.io.gfile.GFile(saved_model_dir + '/hparams.txt', "w") as f:
+			for key, value in hparams._asdict().items():
+				f.write("{0} : {1}\n".format(key, value))
+
 		print("SavedModel model exported to", saved_model_dir)
 
 	if FLAGS.tflite_output_file:

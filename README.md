@@ -28,16 +28,16 @@ Unfortunately, the accuracy of 'sensitive' class is quite low and may be caused 
 I've built two version of models:
 
 #### models
-First model, although overall accuracy reach 92%, we can see that classification score for 'sensitive' images needs improvement.
+First model, although overall accuracy reach 92%, we can see that recall score for 'sensitive' images needs improvement.
 
 ```
               precision    recall  f1-score   support
 
-        safe       0.92      0.98      0.95     16729
-   sensitive       0.88      0.63      0.74      3678
+        safe       0.92      0.99      0.95     16729
+   sensitive       0.91      0.61      0.73      3678
 
     accuracy                           0.92     20407
-   macro avg       0.90      0.81      0.84     20407
+   macro avg       0.92      0.80      0.84     20407
 weighted avg       0.92      0.92      0.91     20407
 ```
 <img alt="Confusion Matrix" width="500" src="https://github.com/anggara-kaskus/image-classification/blob/main/models/confusion_matrix.png?raw=true">
