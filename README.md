@@ -72,15 +72,19 @@ cd image-classification
 ```
 - Install dependencies
 ```sh
-pipenv update
+python -m pipenv update
+python -m pip install -r requirements.txt
 ```
 
 ## Training
 
 ### Prepare sample data
-Put your raw sample data in `data/raw/` folder, with subdirectory with class name that contains corresponding images.
-For example if you want to classify 'nonsensitive' and 'sensitive' images, 
+- Define your image classes for classification. Example: **nonsensitive** and **sensitive** images
+- Create directories under `data/raw/` according to specified classes
+- Create another subdirectories for sub-classes under each class. Therefore, it is easier to organize classification (for example, if you decide to move subclass 'animals' as sensitive, you can just move 'animals' subdirectory into 'sensitive' directory)
+- Put your training images in sub-classes directories
 
+For example if you want to classify **nonsensitive** (subclasses: flowers and animals) and **sensitive** (subclasses: porn and gore) images, please make your directory structure as below:
 ```
 data/
   └─ raw/
@@ -111,8 +115,7 @@ data/
            └─ ...
 ```
 
-> Note: If you want to get sample data for testing, you can download one from [Tensorflow Dataset Collection
-](https://www.tensorflow.org/datasets/catalog/overview#image_classification)
+> Note: If you want to get sample data for testing, you can download one from [Tensorflow Dataset Collection](https://www.tensorflow.org/datasets/catalog/overview#image_classification)
 
 ### Preprocess image data
 Run following command to flatten all subdirectory contents of each classes into one folder:
@@ -264,9 +267,15 @@ Welcome! Enter image path to scan
 ```
 
 ## Debugging
-If you want to debug or just playing around, you can run:
+If you want to debug or just playing around, you can run following command (requires [Jupyter](https://jupyter.org/install)):
 
 ```sh
 cd notebooks
-jupyter-lab &> logs/log.txt & # or jupyter notebook
+
+# run Jupyter Lab or Jupyter Notebook:
+jupyter-lab &> logs/log.txt & 
+# or
+jupyter notebook &> logs/log.txt & 
+
+# and then open file tester.ipynb
 ```
