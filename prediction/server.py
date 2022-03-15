@@ -26,7 +26,8 @@ def load_images(image_paths, image_size, verbose=True):
         image_paths = [join(parent, f) for f in listdir(image_paths) if isfile(join(parent, f))]
     elif isfile(image_paths):
         image_paths = [image_paths]
-
+    else:
+        raise ValueError("File not found: " + image_paths)
 
     for img_path in image_paths:
         if not exists(img_path):
@@ -79,25 +80,38 @@ def classify_nd(model, nd_images):
     return probs
 
 def threaded_client(connection):
-    connection.send(str.encode('\n\nWelcome! Enter image path to scan\n# Path: '))
+    connection.send(str.encode('\033[92m\n\nWelcome! Enter image path to scan\n# Path:\033[0m '))
     while True:
-        data = connection.recv(2048)
-        reply = '> Scanning: ' + data.decode('utf-8')
-        if not data:
-            break
+        try:
+            data = ""
+            while '\n' not in data:
+                temp = connection.recv(2048)
+                if not temp:
+                    break
+                data += temp.decode('utf-8')
 
-        filename = data.decode('utf-8').rstrip();
-        connection.sendall(str.encode(reply))
+            filename = data.rstrip()
+            reply = '\033[90m> Scanning: ' + filename + '\n\033[0m'
+            connection.sendall(str.encode(reply))
 
-        start = datetime.datetime.now()
-        image_preds = classify(model, filename, IMAGE_DIM)
-        end = datetime.datetime.now()
+            start = datetime.datetime.now()
+            image_preds = {}
+            try:
+                image_preds = classify(model, filename, IMAGE_DIM)
+            except ValueError as ex:
+                image_preds['error'] = str(ex)
 
-        delta = end - start
-        image_preds['__time__'] = delta.seconds + (delta.microseconds / 1000000)
-        reply = '> Result for : ' + data.decode('utf-8') + '\n' + json.dumps(image_preds, indent=2) + '\n\n# Path: '
+            end = datetime.datetime.now()
 
-        connection.sendall(str.encode(reply))
+            delta = end - start
+            image_preds['__time__'] = delta.seconds + (delta.microseconds / 1000000)
+            reply = '\033[90m> Result for: ' + filename + '\n\33[36m' + json.dumps(image_preds, indent=2) + '\033[0m\n\n\033[92m# Path: \033[0m'
+
+            connection.sendall(str.encode(reply))
+        except BrokenPipeError:
+            connection.close()
+            print('Client disconnected')
+            return
     connection.close()
 
 
