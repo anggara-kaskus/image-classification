@@ -63,7 +63,7 @@ def save(images_filename, save_directory, cls):
         os.makedirs(cls_save_directory)
 
     for image_filename in tqdm(images_filename):
-        save_image_filename=image_filename.split("/")[-1]
+        save_image_filename=os.path.basename(image_filename)
         path=os.path.join(cls_save_directory, save_image_filename)
         try:
             image=Image.open(image_filename)

@@ -79,15 +79,18 @@ def classify_nd(model, nd_images):
     return probs
 
 def threaded_client(connection):
-    connection.send(str.encode('\n\nWelcome! Enter image path to scan\n# Path: '))
+    connection.send(str.encode('\r\nWelcome! Enter image path to scan\r\n# Path: '))
     while True:
-        data = connection.recv(2048)
-        reply = '> Scanning: ' + data.decode('utf-8')
-        if not data:
-            break
+        data=""
+        while '\n' not in data:
+            temp = connection.recv(2048)
+            if not temp:
+                break
+            data+=temp.decode('utf-8')
 
-        filename = data.decode('utf-8').rstrip();
+        reply = '> Scanning: ' + data
         connection.sendall(str.encode(reply))
+        filename = data.rstrip();
 
         start = datetime.datetime.now()
         image_preds = classify(model, filename, IMAGE_DIM)
@@ -95,7 +98,7 @@ def threaded_client(connection):
 
         delta = end - start
         image_preds['__time__'] = delta.seconds + (delta.microseconds / 1000000)
-        reply = '> Result for : ' + data.decode('utf-8') + '\n' + json.dumps(image_preds, indent=2) + '\n\n# Path: '
+        reply = '> Result for : ' + data + '\r\n' + json.dumps(image_preds, indent=2) + '\r\n# Path: '
 
         connection.sendall(str.encode(reply))
     connection.close()
