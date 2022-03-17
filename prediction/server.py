@@ -73,8 +73,6 @@ def threaded_client(connection):
     temp = connection.recv(2048)
     data=temp.decode('utf-8')
 
-    # reply = '> Scanning: ' + data
-    # connection.sendall(str.encode(reply))
     filename = data.rstrip();
 
     start = datetime.datetime.now()
@@ -83,7 +81,6 @@ def threaded_client(connection):
 
     delta = end - start
     image_preds['__time__'] = delta.seconds + (delta.microseconds / 1000000)
-    # reply = '> Result for : ' + data + '\r\n' + json.dumps(image_preds, indent=2) + '\r\n# Path: '
     reply = data + '\r\n' + json.dumps(image_preds, indent=2)
 
     connection.sendall(str.encode(reply))
