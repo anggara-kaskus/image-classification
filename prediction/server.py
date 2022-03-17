@@ -70,20 +70,15 @@ def classify_nd(model, nd_images):
     return probs
 
 def threaded_client(connection):
-    temp = connection.recv(2048)
-    data=temp.decode('utf-8')
-
-    filename = data.rstrip();
+    url=connection.recv(2048).decode('utf-8').rstrip()
 
     start = datetime.datetime.now()
-    image_preds = classify(model, filename, IMAGE_DIM)
+    image_preds = classify(model, url, IMAGE_DIM)
     end = datetime.datetime.now()
 
     delta = end - start
     image_preds['__time__'] = delta.seconds + (delta.microseconds / 1000000)
-    reply = data + '\r\n' + json.dumps(image_preds, indent=2)
-
-    connection.sendall(str.encode(reply))
+    connection.sendall(str.encode(json.dumps(image_preds)))
     connection.close()
 
 
