@@ -16,7 +16,7 @@ import hashlib
 IMAGE_DIM = 224
 
 script_directory=os.path.dirname(__file__)
-model_directory=join(os.path.dirname(script_directory), 'models')
+model_directory=join(os.path.dirname(script_directory), 'models_categorial')
 
 def load_url(url, image_size):
     loaded_images = []
