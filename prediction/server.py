@@ -11,39 +11,30 @@ from tensorflow import keras
 import tensorflow_hub as hub
 
 import datetime
+import hashlib
 
 IMAGE_DIM = 224
 
 script_directory=os.path.dirname(__file__)
-model_directory=join(os.path.dirname(script_directory), 'models')
+model_directory=join(os.path.dirname(script_directory), 'models_categorial')
 
-def load_images(image_paths, image_size, verbose=True):
+def load_url(url, image_size):
     loaded_images = []
-    loaded_image_paths = []
+    loaded_urls = []
 
-    if isdir(image_paths):
-        parent = abspath(image_paths)
-        image_paths = [join(parent, f) for f in listdir(image_paths) if isfile(join(parent, f))]
-    elif isfile(image_paths):
-        image_paths = [image_paths]
+    try:
+        hash_object = hashlib.md5(url.encode("utf-8")).hexdigest()
+        image_url = tf.keras.utils.get_file(hash_object, origin=url)
+        image = keras.preprocessing.image.load_img(image_url, target_size=image_size)
+        image = keras.preprocessing.image.img_to_array(image)
+        os.remove(image_url)
+        image /= 255
+        loaded_images.append(image)
+        loaded_urls.append(url)
+    except Exception as ex:
+        print("Image Load Failure: ", url, ex)
 
-
-    for img_path in image_paths:
-        if not exists(img_path):
-            print('File not exist: ', img_path)
-            break
-        try:
-            if verbose:
-                print(img_path, "size:", image_size)
-            image = keras.preprocessing.image.load_img(img_path, target_size=image_size)
-            image = keras.preprocessing.image.img_to_array(image)
-            image /= 255
-            loaded_images.append(image)
-            loaded_image_paths.append(img_path)
-        except Exception as ex:
-            print("Image Load Failure: ", img_path, ex)
-
-    return np.asarray(loaded_images), loaded_image_paths
+    return np.asarray(loaded_images), loaded_urls
 
 def load_model(model_path):
     if model_path is None or not exists(model_path):
@@ -54,7 +45,7 @@ def load_model(model_path):
 
 
 def classify(model, input_paths, image_dim=IMAGE_DIM):
-    images, image_paths = load_images(input_paths, (image_dim, image_dim))
+    images, image_paths = load_url(input_paths, (image_dim, image_dim))
     if images.size > 0:
         probs = classify_nd(model, images)
     else:
@@ -79,25 +70,15 @@ def classify_nd(model, nd_images):
     return probs
 
 def threaded_client(connection):
-    connection.send(str.encode('\n\nWelcome! Enter image path to scan\n# Path: '))
-    while True:
-        data = connection.recv(2048)
-        reply = '> Scanning: ' + data.decode('utf-8')
-        if not data:
-            break
+    url=connection.recv(2048).decode('utf-8').rstrip()
 
-        filename = data.decode('utf-8').rstrip();
-        connection.sendall(str.encode(reply))
+    start = datetime.datetime.now()
+    image_preds = classify(model, url, IMAGE_DIM)
+    end = datetime.datetime.now()
 
-        start = datetime.datetime.now()
-        image_preds = classify(model, filename, IMAGE_DIM)
-        end = datetime.datetime.now()
-
-        delta = end - start
-        image_preds['__time__'] = delta.seconds + (delta.microseconds / 1000000)
-        reply = '> Result for : ' + data.decode('utf-8') + '\n' + json.dumps(image_preds, indent=2) + '\n\n# Path: '
-
-        connection.sendall(str.encode(reply))
+    delta = end - start
+    image_preds['__time__'] = delta.seconds + (delta.microseconds / 1000000)
+    connection.sendall(str.encode(json.dumps(image_preds)))
     connection.close()
 
 
