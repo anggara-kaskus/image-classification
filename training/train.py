@@ -96,7 +96,7 @@ flags.DEFINE_string(
 		"saved_model_dir", model_directory,
 		"The final model is exported as a SavedModel directory with this name.")
 flags.DEFINE_string(
-		"tflite_output_file", model_directory + '/tflite/',
+		"tflite_output_file", None,
 		"The final model is exported as a .tflite flatbuffers file with this name.")
 flags.DEFINE_string(
 		"labels_output_file", labels_file,
