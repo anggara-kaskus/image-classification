@@ -323,11 +323,16 @@ def train_model(model, hparams, train_data_and_size, valid_data_and_size):
 
 	earlystop_callback = tf.keras.callbacks.EarlyStopping(
   		monitor='val_loss', min_delta=0.0001,
-  		patience=1)
+  		patience=5)
 	tensorboard_callback = tf.keras.callbacks.TensorBoard(
 		log_dir=os.path.dirname(__file__) + '/logs',
 		histogram_freq=1
 	)
+
+	train_data, train_size = train_data_and_size
+	steps_per_epoch = train_size // hparams.batch_size
+	save_period = 1 # equals to period=1
+
 	save_checkpoint = tf.keras.callbacks.ModelCheckpoint(
 		os.path.dirname(__file__) + '/checkpoints/checkpoint.epoch{epoch:02d}-loss{val_loss:.2f}.hdf5',
 		monitor='val_loss',
@@ -335,10 +340,9 @@ def train_model(model, hparams, train_data_and_size, valid_data_and_size):
 		save_best_only=False,
 		save_weights_only=False,
 		mode='auto',
-		period=1
+		save_freq=int(save_period * steps_per_epoch)
 	)
 
-	train_data, train_size = train_data_and_size
 	valid_data, valid_size = valid_data_and_size
 	# TODO(b/139467904): Expose this hyperparameter as a flag.
 	loss = tf.keras.losses.CategoricalCrossentropy(label_smoothing=hparams.label_smoothing)
@@ -352,7 +356,6 @@ def train_model(model, hparams, train_data_and_size, valid_data_and_size):
 		optimizer=optimizer,
 		loss=loss,
 		metrics=["accuracy"])
-	steps_per_epoch = train_size // hparams.batch_size
 	validation_steps = valid_size // hparams.batch_size
 	return model.fit(
 		train_data,

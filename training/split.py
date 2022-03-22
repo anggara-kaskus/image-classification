@@ -27,7 +27,7 @@ def progression_pattern(total_data_count, test_size):
         start=0,
         stop=total_data_count - 1,
         num=progression_range,
-        dtype=np.int
+        dtype=int
     )
 
     training_idx=list(set(total_idx) - set(test_idx))
@@ -63,7 +63,7 @@ def save(images_filename, save_directory, cls):
         os.makedirs(cls_save_directory)
 
     for image_filename in tqdm(images_filename):
-        save_image_filename=os.path.basename(image_filename)
+        save_image_filename=image_filename.split("/")[-1]
         path=os.path.join(cls_save_directory, save_image_filename)
         try:
             image=Image.open(image_filename)
