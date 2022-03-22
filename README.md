@@ -24,45 +24,11 @@ Unfortunately, the accuracy of 'sensitive' class is quite low and may be caused 
 - The number of images is not balanced between classes
 - The dataset is very noisy (ie: some safe images included in sensitive folder, or vice versa)
 
-### Classification Report
-I've built two version of models:
-
-#### models
-First model, although overall accuracy reach 92%, we can see that classification score for 'sensitive' images needs improvement.
-
-```
-              precision    recall  f1-score   support
-
-        safe       0.92      0.98      0.95     16729
-   sensitive       0.88      0.63      0.74      3678
-
-    accuracy                           0.92     20407
-   macro avg       0.90      0.81      0.84     20407
-weighted avg       0.92      0.92      0.91     20407
-```
-<img alt="Confusion Matrix" width="500" src="https://github.com/anggara-kaskus/image-classification/blob/main/models/confusion_matrix.png?raw=true">
-
-#### models_v2
-This model has only 85% overall accuracy, but better recall / confusion matrix.
-
-```
-              precision    recall  f1-score   support
-
-        safe       0.97      0.84      0.90     16729
-   sensitive       0.55      0.89      0.68      3678
-
-    accuracy                           0.85     20407
-   macro avg       0.76      0.86      0.79     20407
-weighted avg       0.90      0.85      0.86     20407
-```
-<img alt="Confusion Matrix" width="500" src="https://github.com/anggara-kaskus/image-classification/blob/main/models_v2/confusion_matrix.png?raw=true">
-
-We can do fine-tuning later with better dataset.
-
 ## Setup
 ### Prerequisites
 - [Python 3.8+](https://www.python.org/downloads/)
 - [pip](https://pip.pypa.io/en/stable/installation/) and [pipenv](https://pipenv.pypa.io/en/latest/)
+- [graphviz](https://graphviz.gitlab.io/download/)
 
 ### Installation
 - Clone this repo
@@ -72,15 +38,19 @@ cd image-classification
 ```
 - Install dependencies
 ```sh
-pipenv update
+python -m pipenv update
+python -m pip install -r requirements.txt
 ```
 
 ## Training
 
 ### Prepare sample data
-Put your raw sample data in `data/raw/` folder, with subdirectory with class name that contains corresponding images.
-For example if you want to classify 'nonsensitive' and 'sensitive' images, 
+- Define your image classes for classification. Example: **nonsensitive** and **sensitive** images
+- Create directories under `data/raw/` according to specified classes
+- Create another subdirectories for sub-classes under each class. Therefore, it is easier to organize classification (for example, if you decide to move subclass 'animals' as sensitive, you can just move 'animals' subdirectory into 'sensitive' directory)
+- Put your training images in sub-classes directories
 
+For example if you want to classify **nonsensitive** (subclasses: flowers and animals) and **sensitive** (subclasses: porn and gore) images, please make your directory structure as below:
 ```
 data/
   └─ raw/
@@ -111,8 +81,7 @@ data/
            └─ ...
 ```
 
-> Note: If you want to get sample data for testing, you can download one from [Tensorflow Dataset Collection
-](https://www.tensorflow.org/datasets/catalog/overview#image_classification)
+> Note: If you want to get sample data for testing, you can download one from [Tensorflow Dataset Collection](https://www.tensorflow.org/datasets/catalog/overview#image_classification)
 
 ### Preprocess image data
 Run following command to flatten all subdirectory contents of each classes into one folder:
@@ -264,9 +233,15 @@ Welcome! Enter image path to scan
 ```
 
 ## Debugging
-If you want to debug or just playing around, you can run:
+If you want to debug or just playing around, you can run following command (requires [Jupyter](https://jupyter.org/install)):
 
 ```sh
 cd notebooks
-jupyter-lab &> logs/log.txt & # or jupyter notebook
+
+# run Jupyter Lab or Jupyter Notebook:
+jupyter-lab &> logs/log.txt & 
+# or
+jupyter notebook &> logs/log.txt & 
+
+# and then open file tester.ipynb
 ```

@@ -135,5 +135,6 @@ training/data/split/*
 training/data/invalid/*
 training/data/processed/*
 training/data/wrong/*
+training/checkpoints/*
 **/logs/*
 !**/.keep

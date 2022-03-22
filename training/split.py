@@ -27,7 +27,7 @@ def progression_pattern(total_data_count, test_size):
         start=0,
         stop=total_data_count - 1,
         num=progression_range,
-        dtype=np.int
+        dtype=int
     )
 
     training_idx=list(set(total_idx) - set(test_idx))
