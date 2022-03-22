@@ -323,7 +323,7 @@ def train_model(model, hparams, train_data_and_size, valid_data_and_size):
 
 	earlystop_callback = tf.keras.callbacks.EarlyStopping(
   		monitor='val_loss', min_delta=0.0001,
-  		patience=1)
+  		patience=5)
 	tensorboard_callback = tf.keras.callbacks.TensorBoard(
 		log_dir=os.path.dirname(__file__) + '/logs',
 		histogram_freq=1

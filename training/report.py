@@ -23,10 +23,11 @@ model=load_model(model_directory + '/saved_model.h5', custom_objects={'KerasLaye
 image_size=224
 x_test=[]
 y_test=[]
+image_count={}
 t0=time()
 print('Class names: {}'.format(class_names))
 
-print('Loading images...')
+print('Loading images from {}...'.format(test_data_directory))
 image_files=glob.glob(test_data_directory + "/**/*.jpg")
 for image_file in tqdm(image_files):
     # Load the current image file
@@ -41,7 +42,12 @@ for image_file in tqdm(image_files):
     # Now add answer derived from folder
     path_name=os.path.dirname(image_file)
     folder_name=os.path.basename(path_name)
+    if not folder_name in image_count:
+        image_count[folder_name]=0
+    image_count[folder_name] = image_count[folder_name]+1
     y_test.append(class_names.index(folder_name))
+
+print('Image count: {}...'.format(image_count))
 
 def plot_confusion_matrix(cm, classes,
                           normalize=False,
@@ -80,6 +86,7 @@ x_test=np.array(x_test)
 predictions=model.predict(x_test)
 y_pred=np.argmax(predictions, axis=1)
 
+print('Fscore {}'.format(set(y_test) - set(y_pred)))
 # Compute confusion matrix
 cnf_matrix=confusion_matrix(y_test, y_pred)
 np.set_printoptions(precision=2)

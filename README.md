@@ -63,6 +63,7 @@ We can do fine-tuning later with better dataset.
 ### Prerequisites
 - [Python 3.8+](https://www.python.org/downloads/)
 - [pip](https://pip.pypa.io/en/stable/installation/) and [pipenv](https://pipenv.pypa.io/en/latest/)
+- [graphviz](https://graphviz.gitlab.io/download/)
 
 ### Installation
 - Clone this repo
